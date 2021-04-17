@@ -1,0 +1,107 @@
+<!doctype html>
+<head>
+  <title>Comika</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheet.css">
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Date', 'Sales', {'type': 'string', 'role': 'tooltip', 'p': {'html': true}}],
+
+        <%comics.forEach(function(comics, index, arr){%>
+        <%if(comics.month === 1){%>
+              <%var month = "January";%>
+        <%}%>
+        <%if(comics.month === 2){%>
+              <%var month = "February";%>
+        <%}%>
+        <%if(comics.month === 3){%>
+              <%var month = "March";%>
+        <%}%>
+        <%if(comics.month === 4){%>
+              <%var month = "April";%>
+        <%}%>
+        <%if(comics.month === 5){%>
+              <%var month = "May";%>
+        <%}%>
+        <%if(comics.month === 6){%>
+              <%var month = "June";%>
+        <%}%>
+        <%if(comics.month === 7){%>
+              <%var month = "July";%>
+        <%}%>
+        <%if(comics.month === 8){%>
+              <%var month = "August";%>
+        <%}%>
+        <%if(comics.month === 9){%>
+              <%var month = "September";%>
+        <%}%>
+        <%if(comics.month === 10){%>
+              <%var month = "October";%>
+        <%}%>
+        <%if(comics.month === 11){%>
+              <%var month = "November";%>
+        <%}%>
+        <%if(comics.month === 12){%>
+              <%var month = "December";%>
+        <%}%>
+
+        ['<%=month%> <%=comics.year%>', <%=comics.sales%>, createCustomTooltip(<%=comics.sales%>, <%=comics.price%>, '<%=month%>', <%=comics.year%>)],
+
+        <% }) %>
+      ]);
+      var options = {
+        hAxis: {
+            title: 'Estimated # of Units Sold',  
+            titleTextStyle: {color: '#333'}, 
+            baselineColor: {color: '#fff'},
+            focusTarget: 'category'
+          },
+        vAxis: {minValue: 0, baselineColor: {color: '#fff'}, gridlines: {count: 3}},
+        legend: {position: "none"},
+        tooltip: { isHtml: true },
+        series: {
+          0: { color: 'rgb(12, 194, 164)' }
+        },
+        chartArea: {
+          "top": "10",
+          "left": "100",
+          "height": "90"
+        },
+        height: '50px'
+      };
+      var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+
+    function createCustomTooltip(sales, price, month, year) {
+        var rev = sales * price;
+    return '<div id="tooltip_custom">' + '<strong>' + month + ' ' + year + '</strong>' + '<br/>' + '<strong>Sales: </strong>' + sales.toLocaleString() + '<br/>' + '<strong>Revenue: </strong>' + '$' + rev.toLocaleString(); + '</div>';
+    }
+
+  </script>
+</head>
+<body>
+<div id="container_index">
+    <div id="title"><a href="/">Comika</a></div>
+    <form action="/search" method="GET">
+        <input id="search_field" type="text" name="q" value="<%=comic.title%>"> <button id="search_button" type="submit">SEARCH</button>
+    </form>
+    <h4 id="comic_title"><%=comic.title%></h4>
+    <div id="chart_div"></div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,70 @@
+<!doctype html>
+<head>
+  <title>Comika</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Satisfy&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheet.css">
+</head>
+<body>
+<div id="container_search">
+    <div id="title"><a href="/">Comika</a></div>
+    <form action="/search" method="GET">
+        <input id="search_field" type="text" name="q" value="<%=searchTerms%>"> <button id="search_button" type="submit">SEARCH</button>
+    </form>
+    <table class="table table-hover">
+      <tbody>
+        <%if(comic.length === 0){%>
+          <p id="noresults">No results found: "<%=searchTerms%>"</p>
+        <%}else{%>
+        <%comic.forEach(function(comic){%>
+          <tr class="searchResultRow" data-href="/sales/<%=comic._id%>">
+              <td><%= comic.title %></td>
+          </tr>
+        <%});%>
+        <%}%>
+      </tbody>
+    </table>
+    <% var previousPage = page - 1 %>
+    <% var previousPageLink = "?q=" + searchTerms + "&p=" + previousPage; %>
+    <% var nextPage = page + 1 %>
+    <% var nextPageLink = "?q=" + searchTerms + "&p=" + nextPage; %>
+    <nav>
+      <ul class="pagination justify-content-center">
+        <%if(page === 0 && pages != 0){%>
+          <li class="page-item disabled">
+          <a class="page-link" id="page_disabled" aria-disabled="true">Previous</a>
+          </li>
+          <li class="page-item">
+          <a class="page-link" id="page" href="<%=nextPageLink%>">Next</a>
+          </li>
+        <%}else if(pages === 0){%>
+        <%}else if(page === pages){%>
+          <li class="page-item">
+          <a class="page-link" id="page" href="<%=previousPageLink%>">Previous</a>
+          </li>
+          <li class="page-item disabled">
+          <a class="page-link" id="page_disabled" aria-disabled="true">Next</a>
+          </li>
+        <%}else{%>
+          <li class="page-item">
+          <a class="page-link" id="page" href="<%=previousPageLink%>">Previous</a>
+          </li>
+          <li class="page-item">
+          <a class="page-link" id="page" href="<%=nextPageLink%>">Next</a>
+          </li>
+        <%}%>
+      </ul>
+    </nav>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    jQuery(document).ready(function($) {
+    $(".searchResultRow").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+</body>
+</html>
