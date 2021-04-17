@@ -5,22 +5,6 @@ const port = 80;
 const mongoose = require('mongoose');
 const favicon = require('serve-favicon');
 
-function combineSalesForSameMonth(comics){
-    var comicsCombined = new Array(comics.length);
-    comics.forEach(function(comics, index, arr){
-        if(typeof arr[index - 1] !== 'undefined'){
-            if(comics.month === arr[index - 1].month && comics.year === arr[index - 1].year){
-                arr[index - 1].sales = arr[index - 1].sales + comics.sales;
-            }else{
-                comicsCombined[index] = comics;
-            }
-        }else{
-            comicsCombined[index] = comics;
-        }
-    })
-    return comicsCombined;
-}
-
 // CONFIG
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
@@ -38,6 +22,23 @@ let comicSchema = new mongoose.Schema({
 });
 
 let Comic = mongoose.model('Comic', comicSchema);
+
+// FUNCTIONS
+function combineSalesForSameMonth(comics) {
+    var comicsCombined = new Array(comics.length);
+    comics.forEach(function (comics, index, arr) {
+        if (typeof arr[index - 1] !== 'undefined') {
+            if (comics.month === arr[index - 1].month && comics.year === arr[index - 1].year) {
+                arr[index - 1].sales = arr[index - 1].sales + comics.sales;
+            } else {
+                comicsCombined[index] = comics;
+            }
+        } else {
+            comicsCombined[index] = comics;
+        }
+    })
+    return comicsCombined;
+}
 
 // ROUTES
 app.get('/', function (req, res) {
@@ -116,7 +117,7 @@ app.get('/sales/:comicId', function (req, res) {
     })
 });
 
-app.get ('*', function (req, res) {
+app.get('*', function (req, res) {
     res.render('index');
 });
 
